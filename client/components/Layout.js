@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Header from './layout/Header';
@@ -11,7 +11,7 @@ const HeaderWrapper = BodyWrapper.extend`border-bottom: 1px solid #333;`;
 
 const Layout = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div>
         <HeaderWrapper>
           <Header />
@@ -20,7 +20,7 @@ const Layout = () => {
           <Routes />
         </BodyWrapper>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
