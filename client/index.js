@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ApolloClient from 'apollo-boost';
+import ApolloClient from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
+
+import Layout from './components/Layout';
 
 const client = new ApolloClient({
   dataIdFromObject: o => o.id,
@@ -10,7 +12,7 @@ const client = new ApolloClient({
 const Root = () => {
   return (
     <ApolloProvider client={client}>
-      <div>Auth Starter</div>
+      <Layout />
     </ApolloProvider>
   );
 };
