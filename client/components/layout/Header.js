@@ -7,7 +7,7 @@ import gql from 'graphql-tag';
 
 import NavItem from './header/NavItem';
 
-import routeNamesAndLinks from '../data/routeNamesAndLinks';
+import routeNamesAndLinks, * as linkRelated from '../data/routeNamesAndLinks';
 
 import query_current_user from '../../queries/query_current_user';
 
@@ -31,6 +31,14 @@ const Header = ({ onDogSelected }) => (
           <div>Header</div>
           <NavWrapper>
             {_.map(routeNamesAndLinks, ({ link, text }) => {
+              if (data.user && linkRelated.noRenderListIfLoggedIn.includes(link)) {
+                return null;
+              }
+
+              if (!data.user && linkRelated.noRenderListIfLoggedOut.includes(link)) {
+                return null;
+              }
+
               return <NavItem key={link} link={link} text={text} />;
             })}
           </NavWrapper>
