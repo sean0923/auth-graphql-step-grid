@@ -67,6 +67,7 @@ class CommonForm extends Component {
                 <div>
                   <label>Email:</label>
                   <input
+                    autoFocus
                     type="text"
                     value={this.state.email}
                     onChange={e => this.handleOnChange(e, 'email')}

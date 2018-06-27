@@ -7,7 +7,7 @@ import mutation_signup from '../../mutations/mutation_signup';
 const Signup = () => {
   return (
     <div>
-      <CommonForm btnText="Sign In" mutation={mutation_signup} />
+      <CommonForm btnText="Create New Account" mutation={mutation_signup} />
     </div>
   );
 };
