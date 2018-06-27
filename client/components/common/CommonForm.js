@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Mutation } from 'react-apollo';
+import { withRouter } from 'react-router-dom';
 
 import query_current_user from '../../queries/query_current_user';
 import mutation_login from '../../mutations/mutation_login';
@@ -33,54 +34,64 @@ class CommonForm extends Component {
     });
   }
 
-  handleOnSubmit(e, login) {
+  handleOnSubmit(e, mutation) {
     e.preventDefault();
 
     const { email, password } = this.state;
 
-    login({ 
-      variables: { email, password } ,
+    mutation({
+      variables: { email, password },
       refetchQueries: [{ query: query_current_user }],
-    });
-    this.setState({
-      email: '',
-      password: '',
     });
   }
 
   render() {
     return (
-      <Mutation mutation={mutation_login}>
-        {(login, { data }) => (
-          <div>
-            <Form onSubmit={e => this.handleOnSubmit(e, login)}>
-              <div>
-                <label>Email:</label>
-                <input
-                  type="text"
-                  value={this.state.email}
-                  onChange={e => this.handleOnChange(e, 'email')}
-                />
-              </div>
-              <div>
-                <label>Password:</label>
-                <input
-                  type="text"
-                  value={this.state.password}
-                  onChange={e => this.handleOnChange(e, 'password')}
-                />
-              </div>
-              <BtnWrapper>
-                <button className="btn" type="submit">
-                  {this.props.btnText}
-                </button>
-              </BtnWrapper>
-            </Form>
-          </div>
-        )}
+      <Mutation
+        mutation={this.props.mutation}
+        onCompleted={() => {
+          this.props.history.push('/test-page');
+        }}
+        onError={err => {
+          console.log(err);
+          this.setState({
+            email: '',
+            password: '',
+          });
+        }}
+      >
+        {(mutation, { data }) => {
+          return (
+            <div>
+              <Form onSubmit={e => this.handleOnSubmit(e, mutation)}>
+                <div>
+                  <label>Email:</label>
+                  <input
+                    type="text"
+                    value={this.state.email}
+                    onChange={e => this.handleOnChange(e, 'email')}
+                  />
+                </div>
+                <div>
+                  <label>Password:</label>
+                  <input
+                    type="text"
+                    value={this.state.password}
+                    onChange={e => this.handleOnChange(e, 'password')}
+                  />
+                </div>
+                <BtnWrapper>
+                  <button className="btn" type="submit">
+                    {this.props.btnText}
+                  </button>
+                </BtnWrapper>
+              </Form>
+            </div>
+          );
+        }}
       </Mutation>
     );
   }
 }
 
-export default CommonForm;
+export default withRouter(CommonForm);
