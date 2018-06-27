@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { Mutation } from 'react-apollo';
+
+import query_current_user from '../../queries/query_current_user';
+import mutation_login from '../../mutations/mutation_login';
 
 const Form = styled.form`
   width: 500px;
-  border: 1px solid #eee;
+  /* border: 1px solid #eee; */
 `;
 
 const BtnWrapper = styled.div`
@@ -18,6 +22,9 @@ class CommonForm extends Component {
       email: '',
       password: '',
     };
+
+    this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnSubmit = this.handleOnSubmit.bind(this);
   }
 
   handleOnChange(e, field) {
@@ -26,8 +33,15 @@ class CommonForm extends Component {
     });
   }
 
-  handleOnSubmit(e) {
+  handleOnSubmit(e, login) {
     e.preventDefault();
+
+    const { email, password } = this.state;
+
+    login({ 
+      variables: { email, password } ,
+      refetchQueries: [{ query: query_current_user }],
+    });
     this.setState({
       email: '',
       password: '',
@@ -36,27 +50,35 @@ class CommonForm extends Component {
 
   render() {
     return (
-      <Form onSubmit={this.handleOnSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="text"
-            value={this.state.email}
-            onChange={e => this.handleOnChange(e, email)}
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="text"
-            value={this.state.password}
-            onChange={e => this.handleOnChange(e, password)}
-          />
-        </div>
-        <BtnWrapper>
-          <button type="submit">{this.props.btnText}</button>
-        </BtnWrapper>
-      </Form>
+      <Mutation mutation={mutation_login}>
+        {(login, { data }) => (
+          <div>
+            <Form onSubmit={e => this.handleOnSubmit(e, login)}>
+              <div>
+                <label>Email:</label>
+                <input
+                  type="text"
+                  value={this.state.email}
+                  onChange={e => this.handleOnChange(e, 'email')}
+                />
+              </div>
+              <div>
+                <label>Password:</label>
+                <input
+                  type="text"
+                  value={this.state.password}
+                  onChange={e => this.handleOnChange(e, 'password')}
+                />
+              </div>
+              <BtnWrapper>
+                <button className="btn" type="submit">
+                  {this.props.btnText}
+                </button>
+              </BtnWrapper>
+            </Form>
+          </div>
+        )}
+      </Mutation>
     );
   }
 }
