@@ -19,7 +19,7 @@ const NavWrapper = styled.div`
   }
 `;
 
-const Header = ({ onDogSelected }) => (
+const Header = () => (
   <Query query={query_current_user}>
     {({ loading, error, data }) => {
       if (loading) return 'Loading...';

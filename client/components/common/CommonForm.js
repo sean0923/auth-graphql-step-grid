@@ -44,6 +44,7 @@ class CommonForm extends Component {
       refetchQueries: [{ query: query_current_user }],
     })
       .then(data => {
+        // console.log('data: ', data);
         this.props.history.push('/test-page');
       })
       .catch(err => {
@@ -54,7 +55,19 @@ class CommonForm extends Component {
 
   render() {
     return (
-      <Mutation mutation={this.props.mutation}>
+      <Mutation
+        mutation={this.props.mutation}
+        update={(cache, data1) => {
+          console.log('cache: ', cache);
+          console.log('data1: ', data1);
+          const data2 = cache.readQuery({ query: query_current_user });
+          console.log('data2: ', data2);
+          cache.writeQuery({
+            query: query_current_user,
+            data: { user: 'asdfad' },
+          });
+        }}
+      >
         {(mutation, { data }) => {
           return (
             <div>

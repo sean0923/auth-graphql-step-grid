@@ -15,7 +15,7 @@ const handleSignOutClick = (history, mutation) => {
   mutation({
     refetchQueries: [{ query: query_current_user }],
   });
-  history.push('/');
+  // history.push('/');
 };
 
 const Button = ({ text, link, history }) => {
