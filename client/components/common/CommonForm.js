@@ -4,7 +4,6 @@ import { Mutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 
 import query_current_user from '../../queries/query_current_user';
-import mutation_login from '../../mutations/mutation_login';
 
 const Form = styled.form`
   width: 500px;
@@ -22,6 +21,7 @@ class CommonForm extends Component {
     this.state = {
       email: '',
       password: '',
+      errMessages: [],
     };
 
     this.handleOnChange = this.handleOnChange.bind(this);
@@ -42,24 +42,19 @@ class CommonForm extends Component {
     mutation({
       variables: { email, password },
       refetchQueries: [{ query: query_current_user }],
-    });
+    })
+      .then(data => {
+        this.props.history.push('/test-page');
+      })
+      .catch(err => {
+        const errMessages = err.graphQLErrors.map(({ message }) => message);
+        this.setState({ errMessages });
+      });
   }
 
   render() {
     return (
-      <Mutation
-        mutation={this.props.mutation}
-        onCompleted={() => {
-          this.props.history.push('/test-page');
-        }}
-        onError={err => {
-          console.log(err);
-          this.setState({
-            email: '',
-            password: '',
-          });
-        }}
-      >
+      <Mutation mutation={this.props.mutation}>
         {(mutation, { data }) => {
           return (
             <div>
@@ -81,6 +76,11 @@ class CommonForm extends Component {
                     onChange={e => this.handleOnChange(e, 'password')}
                   />
                 </div>
+
+                {this.state.errMessages.map(errMssg => {
+                  return <div key={errMssg}>{errMssg}</div>;
+                })}
+
                 <BtnWrapper>
                   <button className="btn" type="submit">
                     {this.props.btnText}
