@@ -44,7 +44,7 @@ class CommonForm extends Component {
       refetchQueries: [{ query: query_current_user }],
     })
       .then(data => {
-        // console.log('data: ', data);
+        console.log('data: at success', data);
         this.props.history.push('/test-page');
       })
       .catch(err => {
@@ -57,16 +57,25 @@ class CommonForm extends Component {
     return (
       <Mutation
         mutation={this.props.mutation}
-        update={(cache, data1) => {
-          console.log('cache: ', cache);
-          console.log('data1: ', data1);
-          const data2 = cache.readQuery({ query: query_current_user });
-          console.log('data2: ', data2);
-          cache.writeQuery({
-            query: query_current_user,
-            data: { user: 'asdfad' },
-          });
-        }}
+        // update={(cache, { data: { addTodo } }) => {
+        //   const { todos } = cache.readQuery({ query: GET_TODOS });
+        //   cache.writeQuery({
+        //     query: GET_TODOS,
+        //     data: { todos: todos.concat([addTodo]) },
+        //   });
+        // }}
+        // update={(proxy, { data: test }) => {
+        //   console.log('test: ', test);
+        //   const data = proxy.readQuery({ query: query_current_user });
+        //   console.log('data at common form: ', typeof data);
+        //   data.user = true;
+        //   // data.loggedUser = login;
+
+        //   proxy.writeQuery({
+        //     query: query_current_user,
+        //     data,
+        //   });
+        // }}
       >
         {(mutation, { data }) => {
           return (
