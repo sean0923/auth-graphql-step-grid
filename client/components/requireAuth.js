@@ -24,7 +24,6 @@ export default WrappedComponent => {
 
     componentWillUpdate(nextProps) {
       const { user, loading } = nextProps.data;
-      console.log('nextProps.data: ', nextProps.data);
       if (!user && !loading) {
         this.props.history.push('/signin');
       }

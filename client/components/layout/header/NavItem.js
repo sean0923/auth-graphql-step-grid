@@ -15,7 +15,6 @@ const handleSignOutClick = (history, mutation) => {
   mutation({
     refetchQueries: [{ query: query_current_user }],
   });
-  // history.push('/');
 };
 
 const Button = ({ text, link, history }) => {
@@ -30,6 +29,10 @@ const Button = ({ text, link, history }) => {
               </StyledA>
             </div>
           );
+        }
+
+        if (link === routeNamesAndLinks.LINK_TEST_PAGE) {
+          return null;
         }
 
         return (
